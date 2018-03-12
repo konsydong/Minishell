@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <linux/limits.h>
+#include <fcntl.h>
+#define MAXLINE 1024
+
+char cmdline[MAXLINE+1];
+
+void sigint_handler(int sig);
+
+void setup(void){
+	signal(SIGINT,sigint_handler);
+    signal(SIGINT,SIG_IGN);
+}
+
+void sigint_handler(int sig){
+	printf("\n[Minishell]$ ");
+	fflush(stdout);
+}
+
+void init(void){
+    printf("\n[Minishell]$ ");
+	fflush(stdout);
+}
+
+int read_command(){
+	if(fgets(cmdline,MAXLINE,stdin)==NULL)
+		return -1;
+	return 0;
+}
+
+
+void shell_loop(void){
+	while(1){
+		init();
+		if(read_command()==-1)
+			break;
+
+	}
+	printf("\nexit\n");
+}
+
+int main(void){
+	setup();
+	shell_loop();
+
+    return 0;
+}
